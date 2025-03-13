@@ -27,6 +27,8 @@
     h1 {
       color: #892d33; /* Red heading */
       margin-bottom: 20px;
+      font-size: 1.5rem; /* Responsive font size */
+      text-align: center; /* Center align heading */
     }
     #myTable {
       width: 100%;
@@ -34,6 +36,7 @@
       margin-bottom: 20px;
       background-color: white; /* White table background */
       color: #3d2622; /* Dark brown text */
+      overflow-x: auto; /* Enable horizontal scrolling on small screens */
     }
     #myTable th, #myTable td {
       border: 1px solid #ddd;
@@ -100,7 +103,7 @@
     .social-buttons {
       position: fixed; /* Fixed position */
       top: 50%; /* Center vertically */
-      right: 20px; /* Position on the right side */
+      right: 10px; /* Position on the right side */
       transform: translateY(-50%); /* Center alignment */
       display: flex;
       flex-direction: column; /* Stack buttons vertically */
@@ -132,8 +135,8 @@
       background-color: #8f2634; /* Dark red background */
       padding: 10px;
       border-radius: 50%;
-      width: 20px; /* Same size as call button */
-      height: 20px; /* Same size as call button */
+      width: 40px; /* Same size as call button */
+      height: 40px; /* Same size as call button */
       display: flex;
       align-items: center;
       justify-content: center;
@@ -154,7 +157,7 @@
       padding: 10px;
       background-color: #8f2634; /* Dark red footer */
       color: white;
-      font-size: 10px;
+      font-size: 0.8rem; /* Responsive font size */
       font-weight: bold;
       border-radius: 5px;
       width: 100%;
@@ -166,11 +169,31 @@
     footer a:hover {
       text-decoration: underline;
     }
+
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 1.2rem; /* Smaller font size for mobile */
+      }
+      #myTable th, #myTable td {
+        padding: 8px; /* Smaller padding for mobile */
+      }
+      .social-buttons {
+        right: 5px; /* Adjust position for smaller screens */
+      }
+      .social-buttons a, .call-button {
+        width: 35px; /* Smaller buttons for mobile */
+        height: 35px;
+      }
+      .social-buttons a i, .call-button i {
+        font-size: 20px; /* Smaller icons for mobile */
+      }
+    }
   </style>
 </head>
 <body>
 
-  <h1>V/POOVARASANKULAM M.V / A.VIEWER</h1>
+  <h1>V/POOVARASANKULAM M.V / ATT.VIEWER</h1>
   <table id="myTable" class="display">
     <thead>
       <tr>
