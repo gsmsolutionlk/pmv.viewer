@@ -35,6 +35,7 @@
       border-radius: 8px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
       overflow-x: auto;
+      margin-bottom: 20px;
     }
     #myTable {
       width: 100% !important;
@@ -45,18 +46,41 @@
       color: #3E2723;
       font-weight: bold;
       border: 1px solid #ddd;
+      padding: 12px;
     }
     #myTable td {
       font-weight: bold;
       border: 1px solid #ddd;
+      padding: 10px;
     }
-    /* Buttons Styling */
+    #myTable tbody tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+    #myTable tbody tr:hover {
+      background-color: #f5f5f5;
+    }
+    /* DataTables Buttons Container */
+    .dt-buttons {
+      margin-bottom: 15px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+    /* Button Styling */
     .dt-button {
       background-color: #f2b63e !important;
       color: #3E2723 !important;
       border-radius: 5px !important;
       font-weight: bold !important;
-      border: none !important;
+      border: 1px solid #d9a130 !important;
+      padding: 8px 15px !important;
+      transition: all 0.3s ease !important;
+      margin: 2px !important;
+    }
+    .dt-button:hover {
+      background-color: #e0a72d !important;
+      transform: translateY(-2px);
+      box-shadow: 0 3px 5px rgba(0,0,0,0.2) !important;
     }
     /* Floating Refresh Button */
     .refresh-button {
@@ -73,6 +97,11 @@
       align-items: center;
       justify-content: center;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+    }
+    .refresh-button:hover {
+      background-color: #FFC107;
+      transform: rotate(180deg);
     }
     /* Social Buttons Sidebar */
     .social-buttons {
@@ -98,8 +127,16 @@
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
       border: none;
       cursor: pointer;
+      transition: all 0.3s ease;
     }
-    .call-button { background-color: #FFD54F; color: #3E2723; }
+    .call-button { 
+      background-color: #FFD54F; 
+      color: #3E2723; 
+    }
+    .social-buttons a:hover, .call-button:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+    }
     
     #currentDateTime {
       position: fixed;
@@ -113,6 +150,8 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      font-size: 14px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
     footer {
       margin-top: 20px;
@@ -121,6 +160,40 @@
       background-color: #8f2634;
       color: white;
       width: 100%;
+      font-weight: bold;
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 1.8rem;
+      }
+      .table-container {
+        padding: 10px;
+      }
+      #myTable th, #myTable td {
+        padding: 8px;
+        font-size: 14px;
+      }
+      .dt-buttons {
+        justify-content: center;
+      }
+      .dt-button {
+        padding: 6px 10px !important;
+        font-size: 12px !important;
+      }
+      .social-buttons {
+        right: 5px;
+      }
+      .social-buttons a, .call-button {
+        width: 40px;
+        height: 40px;
+      }
+      #currentDateTime {
+        font-size: 12px;
+        bottom: 10px;
+        right: 10px;
+      }
     }
   </style>
 </head>
@@ -142,7 +215,8 @@
         </tr>
       </thead>
       <tbody>
-        </tbody>
+        <!-- Data will be loaded here -->
+      </tbody>
     </table>
   </div>
 
@@ -151,11 +225,21 @@
   </button>
 
   <div class="social-buttons">
-    <button class="call-button" onclick="window.location.href='tel:0770777149';"><i class="fas fa-phone"></i></button>
-    <a href="https://www.facebook.com/" target="_blank"><i class="fab fa-facebook-f"></i></a>
-    <a href="https://www.instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
-    <a href="https://api.whatsapp.com/" target="_blank"><i class="fab fa-whatsapp"></i></a>
-    <a href="viber://forward" target="_blank"><i class="fab fa-viber"></i></a>
+    <button class="call-button" onclick="window.location.href='tel:0770777149';" title="Call">
+      <i class="fas fa-phone"></i>
+    </button>
+    <a href="https://www.facebook.com/" target="_blank" title="Facebook">
+      <i class="fab fa-facebook-f"></i>
+    </a>
+    <a href="https://www.instagram.com" target="_blank" title="Instagram">
+      <i class="fab fa-instagram"></i>
+    </a>
+    <a href="https://api.whatsapp.com/" target="_blank" title="WhatsApp">
+      <i class="fab fa-whatsapp"></i>
+    </a>
+    <a href="viber://forward" target="_blank" title="Viber">
+      <i class="fab fa-viber"></i>
+    </a>
   </div>
 
   <div id="currentDateTime">
@@ -176,6 +260,9 @@
 
   <script>
     const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ28N1kqWZXlnZR_3Q1FxoGXwU2UjAAET7IKyMHeJyECxhDE6KVOcgKPYKviFN_g59zK_JFVVk1Gw7J/pub?gid=0&single=true&output=csv';
+    
+    // Declare table variable globally
+    let dataTable = null;
 
     function fetchData() {
       fetch(csvUrl)
@@ -188,26 +275,76 @@
           rows.forEach((row, index) => {
             if (index === 0) return; // Skip Header
             const columns = row.split(',');
-            const tr = $('<tr>');
-            tr.append(`<td>${index}</td>`); // Row No.
-            columns.forEach(col => tr.append(`<td>${col.replace(/"/g, '')}</td>`));
-            tableBody.append(tr);
+            // Make sure we have the right number of columns
+            if (columns.length >= 6) {
+              const tr = $('<tr>');
+              tr.append(`<td>${index}</td>`); // Row No.
+              // Add each column cell
+              for (let i = 0; i < Math.min(columns.length, 6); i++) {
+                tr.append(`<td>${columns[i].replace(/"/g, '').trim()}</td>`);
+              }
+              // If we have fewer than 6 columns, fill the rest with empty cells
+              for (let i = columns.length; i < 6; i++) {
+                tr.append(`<td></td>`);
+              }
+              tableBody.append(tr);
+            }
           });
 
-          // Initialize/Re-initialize DataTable
-          $('#myTable').DataTable({
-            destroy: true, // Crucial for refresh button to work
+          // Destroy existing DataTable if it exists
+          if (dataTable !== null) {
+            dataTable.destroy();
+            $('#myTable').empty();
+          }
+
+          // Initialize DataTable
+          dataTable = $('#myTable').DataTable({
             dom: 'Bfrtip', // 'B' enables the Buttons
             buttons: [
-              { extend: 'copy', className: 'dt-button' },
-              { extend: 'csv', className: 'dt-button' },
-              { extend: 'excel', className: 'dt-button' },
-              { extend: 'pdf', className: 'dt-button' },
-              { extend: 'print', className: 'dt-button' }
+              { 
+                extend: 'copy', 
+                className: 'dt-button',
+                text: '<i class="fas fa-copy"></i> Copy'
+              },
+              { 
+                extend: 'csv', 
+                className: 'dt-button',
+                text: '<i class="fas fa-file-csv"></i> CSV'
+              },
+              { 
+                extend: 'excel', 
+                className: 'dt-button',
+                text: '<i class="fas fa-file-excel"></i> Excel'
+              },
+              { 
+                extend: 'pdf', 
+                className: 'dt-button',
+                text: '<i class="fas fa-file-pdf"></i> PDF'
+              },
+              { 
+                extend: 'print', 
+                className: 'dt-button',
+                text: '<i class="fas fa-print"></i> Print'
+              }
             ],
-            pageLength: 20,
-            responsive: true
+            pageLength: 40,
+            lengthMenu: [[40, 80, 100, 120], [40, 80, 100, 120]],
+            responsive: true,
+            searching: true,
+            ordering: true,
+            info: true,
+            paging: true,
+            language: {
+              search: "Search:",
+              lengthMenu: "Show _MENU_ entries",
+              info: "Showing _START_ to _END_ of _TOTAL_ entries",
+              infoEmpty: "Showing 0 to 0 of 0 entries",
+              infoFiltered: "(filtered from _MAX_ total entries)",
+              zeroRecords: "No matching records found"
+            }
           });
+          
+          console.log("DataTable initialized with buttons");
         })
         .catch(err => console.error("Error loading CSV:", err));
     }
