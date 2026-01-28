@@ -3,94 +3,66 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ATTENDANCE SHEET</title>
-  <!-- DataTables CSS -->
+  <title>V/POOVARASANKULAM M.V - ATTENDANCE</title>
+  
   <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
-  <!-- Buttons CSS -->
   <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css">
-  <!-- Font Awesome for Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
   <style>
- /* Custom Styling */
     body {
-      font-family: Courier New, Monospace;
+      font-family: 'Courier New', Monospace;
       margin: 0;
       padding: 20px;
-      background-color: #ebbcb7; /* White background */
-      color: #3E2723; /* Dark brown text */
+      background-color: #ebbcb7; 
+      color: #3E2723;
       display: flex;
       flex-direction: column;
       align-items: center;
       min-height: 100vh;
-      position: relative; /* For positioning social buttons */
     }
     h1 {
-      color: #892d33; /* Red heading */
+      color: #892d33;
       margin-bottom: 20px;
-      font-size: 2.5rem; /* Responsive font size */
-      text-align: center; /* Center align heading */
-      text-shadow: 
-        -1px -1px 0 white,  
-        2px -1px 0 white,
-        -1px  2px 0 white,
-        2px  2px 0 white; /* White text border */
+      font-size: 2.5rem;
+      text-align: center;
+      text-shadow: -1px -1px 0 white, 2px -1px 0 white, -1px 2px 0 white, 2px 2px 0 white;
+    }
+    .table-container {
+      width: 100%;
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      overflow-x: auto;
     }
     #myTable {
-      width: 100%;
+      width: 100% !important;
       border-collapse: collapse;
-      margin-bottom: 20px;
-      background-color: white; /* White table background */
-      color: #3d2622; /* Dark brown text */
-      overflow-x: auto; /* Enable horizontal scrolling on small screens */
-    }
-    #myTable th, #myTable td {
-      border: 1px solid #ddd;
-      padding: 12px;
-      text-align: left;
-      font-weight: bold;
     }
     #myTable th {
-      background-color: #f2b63e; /* Yellow header */
-      color: #3E2723; /* Dark brown text */
+      background-color: #f2b63e !important;
+      color: #3E2723;
       font-weight: bold;
-    }
-    #myTable tr:nth-child(even) {
-      background-color: #f2f2f2; /* Light gray for even rows */
-    }
-    #myTable tr:hover {
-      background-color: #ddd; /* Darker gray on hover */
-    }
-    .dataTables_wrapper .dataTables_filter input {
-      padding: 5px;
       border: 1px solid #ddd;
-      border-radius: 4px;
-      background-color: white;
-      color: #3E2723;
     }
-    .dataTables_wrapper .dataTables_length select {
-      padding: 5px;
+    #myTable td {
+      font-weight: bold;
       border: 1px solid #ddd;
-      border-radius: 4px;
-      background-color: white;
-      color: #3E2723;
     }
-    .dt-buttons button {
-      margin: 5px;
-      padding: 5px 10px;
-      border: none;
-      border-radius: 4px;
-      background-color: #FFD54F; /* Yellow buttons */
-      color: #FFFFFF; /* Dark brown text */
-      cursor: pointer;
+    /* Buttons Styling */
+    .dt-button {
+      background-color: #f2b63e !important;
+      color: #3E2723 !important;
+      border-radius: 5px !important;
+      font-weight: bold !important;
+      border: none !important;
     }
-    .dt-buttons button:hover {
-      background-color: #FFC107; /* Darker yellow on hover */
-    }
-    /* Refresh Button */
+    /* Floating Refresh Button */
     .refresh-button {
       margin-top: 20px;
-      background-color: #FFD54F; /* Yellow button */
-      color: #3E2723; /* Dark brown text */
+      background-color: #FFD54F;
+      color: #3E2723;
       border: none;
       border-radius: 50%;
       width: 50px;
@@ -102,266 +74,155 @@
       justify-content: center;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
-    .refresh-button:hover {
-      background-color: #FFC107; /* Darker yellow on hover */
-    }
-    /* Social Media Buttons and Call Button */
+    /* Social Buttons Sidebar */
     .social-buttons {
-      position: fixed; /* Fixed position */
-      top: 50%; /* Center vertically */
-      right: 10px; /* Position on the right side */
-      transform: translateY(-50%); /* Center alignment */
+      position: fixed;
+      top: 50%;
+      right: 10px;
+      transform: translateY(-50%);
       display: flex;
-      flex-direction: column; /* Stack buttons vertically */
-      gap: 10px; /* Space between buttons */
+      flex-direction: column;
+      gap: 10px;
+      z-index: 1000;
     }
-    /* Call Button */
-    .call-button {
-      background-color: #FFD54F; /* Yellow button */
-      color: #3E2723; /* Dark brown text */
+    .social-buttons a, .call-button {
+      text-decoration: none;
+      color: white;
+      background-color: #8f2634;
+      border-radius: 50%;
+      width: 45px;
+      height: 45px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
       border: none;
-      border-radius: 50%;
-      width: 55px; /* Same size as social buttons */
-      height: 55px; /* Same size as social buttons */
-      font-size: 24px;
       cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      transition: background-color 0.3s, color 0.3s; /* Smooth transition */
     }
-    .call-button:hover {
-      background-color: #FFC107; /* Darker yellow on hover */
-    }
-    /* Social Media Buttons */
-    .social-buttons a {
-      text-decoration: none;
-      color: white;
-      background-color: #8f2634; /* Dark red background */
-      padding: 10px;
-      border-radius: 50%;
-      width: 35px; /* Same size as call button */
-      height: 35px; /* Same size as call button */
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      transition: background-color 0.3s, color 0.3s; /* Smooth transition */
-    }
-    .social-buttons a:hover {
-      background-color: #FFD54F; /* Yellow on hover */
-      color: #3E2723; /* Dark brown text */
-    }
-    /* Adjust social media icons to match the size */
-    .social-buttons a i {
-      font-size: 24px; /* Same size as call button icon */
-    }
-    footer {
-      margin-top: auto;
-      text-align: center;
-      padding: 10px;
-      background-color: #8f2634; /* Dark red footer */
-      color: white;
-      font-size: 0.8rem; /* Responsive font size */
-      font-weight: bold;
-      border-radius: 5px;
-      width: 100%;
-    }
-    footer a {
-      color: #FFD54F; /* Yellow link */
-      text-decoration: none;
-    }
-    footer a:hover {
-      text-decoration: underline;
-    }
-
-    /* Current Date and Time Styling */
+    .call-button { background-color: #FFD54F; color: #3E2723; }
+    
     #currentDateTime {
-      position: fixed; /* Fixed position */
-      bottom: 20px; /* Position at the bottom */
-      right: 20px; /* Position at the right */
-      background-color: #8f2634; /* Dark red background */
-      color: white; /* White text */
-      padding: 10px 15px; /* Padding for spacing */
-      border-radius: 10px; /* Rounded corners */
-      font-size: 1rem; /* Font size */
-      font-weight: bold; /* Bold text */
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #8f2634;
+      color: white;
+      padding: 10px 15px;
+      border-radius: 10px;
+      font-weight: bold;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 5px; /* Space between date and time */
     }
-
-    #currentDateTime span {
-      display: block; /* Ensure date and time are on separate lines */
-    }
-
-    /* Responsive Adjustments */
-    @media (max-width: 768px) {
-      h1 {
-        font-size: 1.2rem; /* Smaller font size for mobile */
-      }
-      #myTable th, #myTable td {
-        padding: 8px; /* Smaller padding for mobile */
-      }
-      .social-buttons {
-        right: 5px; /* Adjust position for smaller screens */
-      }
-      .social-buttons a, .call-button {
-        width: 35px; /* Smaller buttons for mobile */
-        height: 35px;
-      }
-      .social-buttons a i, .call-button i {
-        font-size: 20px; /* Smaller icons for mobile */
-      }
-      #currentDateTime {
-        font-size: 0.8rem; /* Smaller font size for mobile */
-        bottom: 10px; /* Adjust position for smaller screens */
-        right: 10px; /* Adjust position for smaller screens */
-      }
+    footer {
+      margin-top: 20px;
+      text-align: center;
+      padding: 15px;
+      background-color: #8f2634;
+      color: white;
+      width: 100%;
     }
   </style>
 </head>
 <body>
 
   <h1>V/POOVARASANKULAM M.V / A.VIEWER</h1>
-  <table id="myTable" class="display">
-    <thead>
-      <tr>
-        <th>No.</th> <!-- Row number column -->
-        <th>STAFF_ID</th>
-        <th>TIME_IN</th>
-        <th>TIME_OUT</th>
-        <th>IN_DATE</th>
-        <th>NAME</th>
-        <th>OUT_DATE</th>
-      </tr>
-    </thead>
-    <tbody>
-      <!-- Data will be populated dynamically -->
-    </tbody>
-  </table>
 
-  <!-- Refresh Button -->
-  <button class="refresh-button" onclick="fetchData()">
-    <i class="fas fa-sync-alt"></i> <!-- Font Awesome refresh icon -->
-  </button>
-
-  <!-- Social Media Buttons and Call Button -->
-  <div class="social-buttons">
-    <!-- Call Button -->
-    <button class="call-button" onclick="window.location.href='tel:0770777149';">
-      <i class="fas fa-phone"></i> <!-- Font Awesome phone icon -->
-    </button>
-
-    <!-- Social Media Buttons -->
-    <a href="https://www.facebook.com/sharer/sharer.php?u=YOUR_URL" target="_blank">
-      <i class="fab fa-facebook-f"></i> <!-- Facebook icon -->
-    </a>
-    <a href="https://www.instagram.com" target="_blank">
-      <i class="fab fa-instagram"></i> <!-- Instagram icon -->
-    </a>
-    <a href="https://api.whatsapp.com/send?text=Check%20this%20out:%20YOUR_URL" target="_blank">
-      <i class="fab fa-whatsapp"></i> <!-- WhatsApp icon -->
-    </a>
-    <a href="viber://forward?text=Check%20this%20out:%20YOUR_URL" target="_blank">
-      <i class="fab fa-viber"></i> <!-- Viber icon -->
-    </a>
+  <div class="table-container">
+    <table id="myTable" class="display nowrap">
+      <thead>
+        <tr>
+          <th>No.</th>
+          <th>STAFF_ID</th>
+          <th>TIME_IN</th>
+          <th>TIME_OUT</th>
+          <th>IN_DATE</th>
+          <th>NAME</th>
+          <th>OUT_DATE</th>
+        </tr>
+      </thead>
+      <tbody>
+        </tbody>
+    </table>
   </div>
 
-  <!-- Current Date and Time Display -->
+  <button class="refresh-button" onclick="fetchData()" title="Refresh Data">
+    <i class="fas fa-sync-alt"></i>
+  </button>
+
+  <div class="social-buttons">
+    <button class="call-button" onclick="window.location.href='tel:0770777149';"><i class="fas fa-phone"></i></button>
+    <a href="https://www.facebook.com/" target="_blank"><i class="fab fa-facebook-f"></i></a>
+    <a href="https://www.instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
+    <a href="https://api.whatsapp.com/" target="_blank"><i class="fab fa-whatsapp"></i></a>
+    <a href="viber://forward" target="_blank"><i class="fab fa-viber"></i></a>
+  </div>
+
   <div id="currentDateTime">
     <span id="date"></span>
     <span id="time"></span>
   </div>
 
-  <!-- Footer -->
-  <footer>
-    DEVELOPED BY C.M.Sujen © 2025
-  </footer>
+  <footer>DEVELOPED BY C.M.Sujen © 2025</footer>
 
-  <!-- jQuery -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <!-- DataTables JS -->
   <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-  <!-- Buttons JS -->
   <script src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"></script>
-  <!-- JSZip for Excel Export -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
-  <!-- PDFMake for PDF Export -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
-  <!-- Buttons HTML5 Export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
   <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.html5.min.js"></script>
-  <!-- Buttons Print -->
   <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.print.min.js"></script>
 
   <script>
-    $(document).ready(function() {
-      // URL of the published Google Sheets CSV
-      const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ28N1kqWZXlnZR_3Q1FxoGXwU2UjAAET7IKyMHeJyECxhDE6KVOcgKPYKviFN_g59zK_JFVVk1Gw7J/pub?gid=0&single=true&output=csv';
+    const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ28N1kqWZXlnZR_3Q1FxoGXwU2UjAAET7IKyMHeJyECxhDE6KVOcgKPYKviFN_g59zK_JFVVk1Gw7J/pub?gid=0&single=true&output=csv';
 
-      // Function to fetch and update table data
-      function fetchData() {
-        fetch(csvUrl)
-          .then(response => response.text())
-          .then(data => {
-            const rows = data.split('\n'); // Split CSV into rows
-            const tableBody = $('#myTable tbody');
-            tableBody.empty(); // Clear existing rows
+    function fetchData() {
+      fetch(csvUrl)
+        .then(response => response.text())
+        .then(csvText => {
+          const rows = csvText.split('\n').filter(row => row.trim() !== ""); 
+          const tableBody = $('#myTable tbody');
+          tableBody.empty();
 
-            // Loop through rows and populate the table
-            rows.forEach((row, index) => {
-              if (index === 0) return; // Skip header row
-              const columns = row.split(','); // Split row into columns
-              const tr = $('<tr>');
-              tr.append(`<td>${index}</td>`); // Add row number
-              columns.forEach(column => {
-                tr.append(`<td>${column}</td>`); // Add columns
-              });
-              tableBody.append(tr);
-            });
+          rows.forEach((row, index) => {
+            if (index === 0) return; // Skip Header
+            const columns = row.split(',');
+            const tr = $('<tr>');
+            tr.append(`<td>${index}</td>`); // Row No.
+            columns.forEach(col => tr.append(`<td>${col.replace(/"/g, '')}</td>`));
+            tableBody.append(tr);
+          });
 
-            // Reinitialize DataTable (destroy and recreate)
-            if ($.fn.DataTable.isDataTable('#myTable')) {
-              $('#myTable').DataTable().destroy();
-            }
-            $('#myTable').DataTable({
-              paging: true, // Enable pagination
-              pageLength: 35, // Default number of rows per page
-              lengthMenu: [[10, 20, 40, 80, 100], [10, 20, 40, 80, 100]], // Rows per page options
-              dom: 'Bfrtip', // Add buttons to the DOM
-              buttons: [
-                'copy', 'csv', 'excel', 'pdf', 'print' // Export buttons
-              ],
-            });
-          })
-          .catch(error => console.error('Error fetching data:', error));
-      }
-
-      // Fetch data initially
-      fetchData();
-    });
-
-    // Function to update the current date and time
-    function updateDateTime() {
-      const now = new Date();
-      const date = now.toLocaleDateString(); // Get current date
-      const time = now.toLocaleTimeString(); // Get current time
-
-      // Update the HTML elements
-      document.getElementById('date').textContent = `📅 ${date}`;
-      document.getElementById('time').textContent = `⏰ ${time}`;
+          // Initialize/Re-initialize DataTable
+          $('#myTable').DataTable({
+            destroy: true, // Crucial for refresh button to work
+            dom: 'Bfrtip', // 'B' enables the Buttons
+            buttons: [
+              { extend: 'copy', className: 'dt-button' },
+              { extend: 'csv', className: 'dt-button' },
+              { extend: 'excel', className: 'dt-button' },
+              { extend: 'pdf', className: 'dt-button' },
+              { extend: 'print', className: 'dt-button' }
+            ],
+            pageLength: 20,
+            responsive: true
+          });
+        })
+        .catch(err => console.error("Error loading CSV:", err));
     }
 
-    // Update the date and time every second
-    setInterval(updateDateTime, 1000);
+    function updateDateTime() {
+      const now = new Date();
+      document.getElementById('date').textContent = `📅 ${now.toLocaleDateString()}`;
+      document.getElementById('time').textContent = `⏰ ${now.toLocaleTimeString()}`;
+    }
 
-    // Initialize the date and time on page load
-    updateDateTime();
+    $(document).ready(function() {
+      fetchData();
+      setInterval(updateDateTime, 1000);
+      updateDateTime();
+    });
   </script>
 </body>
 </html>
-
